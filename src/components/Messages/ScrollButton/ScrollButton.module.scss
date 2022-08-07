@@ -1,0 +1,60 @@
+.btn{
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #26272D;
+    border: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    transform: translate(-24px, 100%);
+    animation: appearance .3s forwards;
+    transition: all 0.5s;
+    z-index: 1000;
+
+    & > img{
+        width: 20px;
+        height: 20px;
+        transform: translateY(2px);
+    }
+
+    & > span{
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #F1E0AC;
+        color: black;
+        position: absolute;
+        top: 0;
+        right: 50%;
+        transform: translate(50%, -50%);
+    }
+}
+
+.close_btn{
+    animation: fadeBtn .3s forwards !important;
+}
+
+@keyframes appearance {
+    0%{
+        transform: translate(-24px, 100%);
+    }
+    100%{
+        transform: translate(-24px, -24px);
+    }
+}
+
+@keyframes fadeBtn {
+    0%{
+        transform: translate(-24px, -24px);
+    }
+    100%{
+        transform: translate(-24px, 150%);
+    }
+}

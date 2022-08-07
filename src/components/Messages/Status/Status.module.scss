@@ -1,0 +1,25 @@
+.messages__status, .messages__status__from{
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    & > time{
+        font-size: 12px;
+        line-height: 18px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    & > img{
+        width: 18px;
+        height: 18px;
+        margin-right: 5px;
+    }
+}
+
+.messages__status{
+    margin-left: 24px;
+    align-self: flex-start;
+}
+
+.messages__status__from{
+    align-self: flex-end;
+    margin-right: 24px;
+}

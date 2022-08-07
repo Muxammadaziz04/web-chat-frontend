@@ -1,0 +1,24 @@
+.info{
+    width: 100%;
+    padding: 24px;
+    border-bottom: 1px solid #37393C;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__title{
+        align-self: flex-start;
+        font-family: 'Nunito';
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        color: #FFFFFF;
+    }
+
+    &__body{
+        align-self: flex-start;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+}

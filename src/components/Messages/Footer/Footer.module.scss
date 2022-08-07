@@ -1,0 +1,32 @@
+.footer{
+    width: 100%;
+    padding: 12px 24px;
+    border-top: 1px solid #37393C;
+    display: flex;
+    position: relative;
+
+    &__btn{
+        background: inherit;
+        border: none;
+    }
+
+    &__input{
+        background: #26272D;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        line-height: 20px;
+        height: 40px;
+        padding: 8px 12px;
+        flex-grow: 1;
+        border: none;
+        outline: none;
+        margin: 0 10px;
+
+        &::placeholder{
+            font-size: 14px;
+            line-height: 20px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    }
+}

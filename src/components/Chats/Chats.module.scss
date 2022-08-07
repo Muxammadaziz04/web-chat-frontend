@@ -1,0 +1,41 @@
+.chats {
+    width: clamp(25%, 25%, 100%);
+    max-width: 100%;
+    min-width: 25%;
+    max-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-right: 1px solid #37393C;
+
+    &__container{
+        width: 100%;
+        border-top: 1px solid #37393C;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    &__title {
+        padding: 12px 24px;
+        font-family: 'Nunito';
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    &__list{
+        height: 100%;
+        list-style: none;
+    }
+
+    &::-webkit-scrollbar{
+        width: 0;
+        background: inherit;
+    }
+
+    &::-webkit-scrollbar-thumb{
+        border-radius: 2px;
+        background: rgba(0,0,0,0.4);
+    }
+}
