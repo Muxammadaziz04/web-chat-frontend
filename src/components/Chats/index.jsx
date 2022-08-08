@@ -4,12 +4,13 @@ import { useSelector } from "react-redux";
 import Item from "./Item";
 import Header from './Header';
 import Search from "./Search";
+import { host, token } from '../../constants'
 
 import style from './Chats.module.scss'
 
 
 const Chats = () => {
-    const [filteredUsers, setFilteredUsers] = useState([])
+    const [dialogs, setDialogs] = useState([])
 
     const inputValue = useSelector(state => {
         const { text } = state.searchReducer
@@ -17,7 +18,19 @@ const Chats = () => {
     })
 
     useEffect(() => {
-        // setFilteredUsers(users?.filter(user => user.full_name.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase().trim())))
+        const getDialogs = async () => {
+            let res = await fetch(`${host}/dialogs`, {
+                headers: { token }
+            })
+
+            res = await res.json()
+
+            if(res.status === 200){
+                setDialogs(res.data)
+            }
+        }
+
+        getDialogs()
     }, [inputValue])
     
     return (
@@ -28,7 +41,7 @@ const Chats = () => {
                 <h2 className={style.chats__title}>Messages</h2>
                 <ul className={style.chats__list}>
                     {
-                        // dialogs?.map(dialog => <Item chat={dialog} key={dialog.dialog_id}/>)
+                        dialogs?.length && dialogs?.map(dialog => <Item chat={dialog} key={dialog.dialog_id}/>)
                     }
                 </ul>
             </div>
