@@ -43,3 +43,10 @@ input{
 .close{
   display: none !important;
 }
+
+.m{
+  display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}

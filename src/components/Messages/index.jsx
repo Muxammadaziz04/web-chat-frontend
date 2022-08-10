@@ -1,5 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { List, AutoSizer, CellMeasurer, CellMeasurerCache } from "react-virtualized";
+import { useParams } from "react-router-dom";
 
 import MessageItem from "./Item";
 import Header from "./Header";
@@ -8,43 +10,33 @@ import MessagesDate from "./Date";
 import ScrollButton from './ScrollButton'
 import btnActions from '../../redux/actions/ButtonToScrollAction.js';
 import setScrollPos from "../../redux/actions/ScrollPosAction";
+import getTimes from "../../Utils";
+import { host, token } from '../../constants'
 
-import style from './Messages.module.scss';
+import styles from './Messages.module.scss';
 
 const Messages = () => {
-    const [messages] = useState([])
+    const [messages, setMessages] = useState([])
     const { openBtn, closeBtn } = btnActions
     const dispatch = useDispatch()
-    const { chat_id } = useSelector(state => state.chatReducer)
     const container = useRef()
+    const { dialog_id } = useParams()
+    const cache = useRef(new CellMeasurerCache({
+        fixedWidth: true,
+        defaultHeight: 1,
+    }))
 
     let prevScrollpos = ''
     let currentFullDate = ''
 
     const firstNewMessageId = messages?.find(msg => msg.viewed === false)?.message_id
 
-    const getMonthInString = useCallback((num) => {
-        const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        return month[num]
-    }, [])
-
-
-    const getMsgDate = useCallback((date) => {
-        const currentYear = new Date().getFullYear()
-        const messageDate = new Date(date)
-        const messageYear = messageDate.getFullYear()
-        const messageMonth = getMonthInString(messageDate.getMonth())
-        const messageDay = messageDate.getDate()
-        return `${messageDay} ${messageMonth} ${messageYear == currentYear ? '' : messageYear}`
-    }, [])
-
-
     const handleScroll = () => {
         const currentScrollPos = container.current.scrollTop
         const currentScrollPosWithBottom = container?.current?.scrollTop + container?.current?.clientHeight
         const scrollHeight = container?.current?.scrollHeight
 
-        if (currentScrollPosWithBottom == scrollHeight || prevScrollpos > currentScrollPos) {
+        if (currentScrollPosWithBottom === scrollHeight || prevScrollpos > currentScrollPos) {
             dispatch(closeBtn())
         } else {
             dispatch(openBtn())
@@ -53,34 +45,43 @@ const Messages = () => {
         prevScrollpos = currentScrollPos;
     }
 
-
-    const scrollToBottom = () => {
+    const scrollToBottom = useCallback(() => {
         container.current.scrollTo({
             top: container.current.scrollHeight,
             behavior: 'smooth'
         })
-    }
-
-    useEffect(() => {
-        prevScrollpos = container?.current.scrollTop;
-
-        const unreadedId = messages.find(message => message.viewed == false)?.message_id
-        const scrollSizeToUnreadedMessage = document.getElementById(unreadedId)?.offsetTop
-        const scrollHeight = scrollSizeToUnreadedMessage - 40 || container.current.scrollHeight
-
-        container.current.scrollTo({
-            top: scrollHeight,
-            behavior: "auto"
-        })
     }, [])
 
-    return (
-        <div className={style.messages}>
+    useLayoutEffect(() => {
+        prevScrollpos = container?.current?.scrollTop;
+        ; (() => {
+            fetch(`${host}/messages/${dialog_id}`, { headers: { token } })
+                .then(response => response.json())
+                .then(response => setMessages(response.data))
+        })()
+
+        const unreadedId = messages.find(message => message.viewed === false)?.message_id
+        const scrollSizeToUnreadedMessage = document.getElementById(unreadedId)?.offsetTop
+        const scrollHeight = scrollSizeToUnreadedMessage - 40 || container.current.scrollHeight
+        
+        // con.childNodes[0].scrollTo({
+        //     top: 500,
+        //     behavior: "auto"
+        // })
+    }, [])
+
+    useEffect(() => {
+        let con = document.getElementsByClassName('ReactVirtualized__Grid__innerScrollContainer')
+        console.log([...con][0]);
+    }, [messages])
+
+    return(
+        <div className={styles.messages}>
             <Header />
 
-            <div className={style.messages__btnwrapper}>
+            <div className={styles.messages__btnwrapper}>
                 <div
-                    className={style.messages__container}
+                    className={styles.messages__container}
                     ref={container}
                     onScroll={(e) => {
                         dispatch(setScrollPos(e.target.scrollTop))
@@ -88,22 +89,66 @@ const Messages = () => {
                     }}
                 >
                     {
-                        messages.map(msg => {
-                            const msgDate = getMsgDate(msg.time)
+                        // messages.map(msg => {
+                        //     const { fullDate } = getTimes(msg.date)
 
-                            const Item = (
-                                <React.Fragment key={msg.message_id}>
-                                    {currentFullDate != msgDate ? <MessagesDate text={msgDate} /> : <></>}
-                                    {firstNewMessageId === msg.message_id ? <MessagesDate text={'new Message'} /> : <></>}
-                                    <MessageItem message={msg} container={container} />
-                                </React.Fragment>
-                            )
-                            // currentFullDate != msgDate ? currentFullDate = msgDate : null
+                        //     const Item = (
+                        //         <React.Fragment key={msg.id}>
+                        //             {currentFullDate != fullDate ? <MessagesDate text={fullDate} /> : <></>}
+                        //             {firstNewMessageId === msg.message_id ? <MessagesDate text={'new Message'} /> : <></>}
+                        //             <MessageItem message={msg} container={container} />
+                        //         </React.Fragment>
+                        //     )
+                        //     currentFullDate = currentFullDate !== fullDate ? fullDate : currentFullDate
 
-                            return Item
-                        })
+                        //     return Item
+                        // })
+
+                        <AutoSizer>
+                            {
+                                ({ width, height }) => (
+                                    <List
+                                        className={styles.messages__wrapper}
+                                        id="54"
+                                        width={width}
+                                        height={height}
+                                        rowHeight={cache.current.rowHeight}
+                                        deferredMeasurementCache={cache.current}
+                                        rowCount={messages?.length || 0}
+                                        rowRenderer={({ key, index, style, parent }) => {
+                                            const msg = messages[index];
+                                            const { fullDate } = getTimes(msg.created_at)
+
+                                            const Item = (
+                                                <span key={msg.message_id} className={'m'} style={style}>
+                                                    {currentFullDate !== fullDate ? <MessagesDate text={fullDate} /> : <></>}
+                                                    {firstNewMessageId === msg.message_id ? <MessagesDate text={'new Message'} /> : <></>}
+                                                    <MessageItem message={msg} container={container} />
+                                                </span>
+                                            )
+                                            currentFullDate = currentFullDate !== fullDate ? fullDate : currentFullDate
+
+
+                                            return (
+                                                <CellMeasurer
+                                                    id="78"
+                                                    key={key}
+                                                    cache={cache.current}
+                                                    parent={parent}
+                                                    columnIndex={0}
+                                                    rowIndex={index}
+                                                >
+                                                    {Item}
+                                                </CellMeasurer>
+                                            );
+                                        }}
+                                    />
+                                )
+                            }
+                        </AutoSizer>
                     }
                 </div>
+
                 <ScrollButton scrollFunc={scrollToBottom} />
             </div>
 

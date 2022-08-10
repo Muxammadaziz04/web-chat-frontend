@@ -1,31 +1,29 @@
+import React from 'react';
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import LetteredAvatar from 'react-lettered-avatar';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-import chatActions from '../../../redux/actions/ChatAction.js'
+import getTimes from '../../../Utils';
 
 import style from './Item.module.scss'
 
 const ChatItem = ({ chat }) => {
-    const dispatch = useDispatch()
-
-    const user = chat.companion[0]
-    const message = chat.last_message[0]
-    let time = new Date(message?.created_at)
-    const minute = time.getMinutes()
-    const hours = time.getHours()
-    time = `${hours < 10 ? `0${hours}` : hours}:${minute < 10 ? `0${minute}` : minute}`
-
+    const getUserMessage = () => ({
+        user: chat?.companion[0],
+        message: chat?.last_message[0]?.message_body,
+        time: getTimes(chat?.last_message[0]?.created_at).time
+    })
+    
     const handleClick = (e) => {
         const items = document.querySelectorAll('[data-item]')
 
         items.forEach((item) => {
             item.classList.remove(`${style.profile__active}`)
         })
-
         e.target.closest('li').classList.add(`${style.profile__active}`)
-        dispatch(chatActions.setChat(chat?.dialog_id))
     }
+    
+    const { user, message, time } = getUserMessage()
 
     return (
         <Link to={`/dialog/${chat?.dialog_id}`}>
@@ -33,19 +31,28 @@ const ChatItem = ({ chat }) => {
                 <div className={`${style.profile__img} ${user.user_action === 'online' ? style.online : ''}`}>
                     <span>
                         {
-                            user.user_avatar ? <img src={user?.user_avatar} alt='profile img' /> 
-                            : <LetteredAvatar name={user.first_name} />
+                            user.user_avatar ? 
+                            <LazyLoadImage 
+                                src={user?.user_avatar} 
+                                width="100%" 
+                                height="100%" 
+                                alt='profile img' 
+                                effect="blur" 
+                                placeholderSrc='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC'
+                                wrapperClassName={style.avatar} 
+                            />
+                            : <LetteredAvatar name={user.fullname} />
                         }
                     </span>
                 </div>
                 <span>
                     <span className={style.profile__info}>
-                        <p className={style.profile__name}>{user.first_name}</p>
+                        <p className={style.profile__name}>{user.fullname || ''}</p>
                         <time className={style.profile__time}>{time || ''}</time>
                     </span>
                     <span className={style.profile__info}>
                         {
-                            message?.message_body && <p className={style.profile__message}>{message?.message_body}</p>
+                            message && <p className={style.profile__message}>{message}</p>
                         }
                         {
                             user?.notificate && <span className={style.profile__notificate}>{user?.notificate}</span>
@@ -57,4 +64,4 @@ const ChatItem = ({ chat }) => {
     );
 }
 
-export default ChatItem;
+export default React.memo(ChatItem);

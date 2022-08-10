@@ -7,18 +7,22 @@ import Search from "./Search";
 import { host, token } from '../../constants'
 
 import style from './Chats.module.scss'
+import DeafultChatsComponent from "./DefaultChatsComponent";
+import Loader from "../Loader";
 
 
 const Chats = () => {
     const [dialogs, setDialogs] = useState([])
+    const [loader, setLoader] = useState(true)
 
-    const inputValue = useSelector(state => {
-        const { text } = state.searchReducer
-        return text
-    })
+    // const inputValue = useSelector(state => {
+    //     const { text } = state.searchReducer
+    //     return text
+    // })
 
     useEffect(() => {
         const getDialogs = async () => {
+            setLoader(true)
             let res = await fetch(`${host}/dialogs`, {
                 headers: { token }
             })
@@ -27,11 +31,13 @@ const Chats = () => {
 
             if(res.status === 200){
                 setDialogs(res.data)
+                setLoader(false)
+            } else {
+                alert('Somethink went wrong. Please reload the app')
             }
         }
-
         getDialogs()
-    }, [inputValue])
+    }, [])
     
     return (
         <aside className={style.chats}>
@@ -41,7 +47,9 @@ const Chats = () => {
                 <h2 className={style.chats__title}>Messages</h2>
                 <ul className={style.chats__list}>
                     {
-                        dialogs?.length && dialogs?.map(dialog => <Item chat={dialog} key={dialog.dialog_id}/>)
+                        loader ? <Loader /> : 
+                        dialogs && dialogs.length ? dialogs.map(dialog => <Item chat={dialog} key={dialog.dialog_id}/>)
+                        : <DeafultChatsComponent />
                     }
                 </ul>
             </div>
