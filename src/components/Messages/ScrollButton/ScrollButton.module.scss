@@ -10,8 +10,8 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    transform: translate(-24px, 100%);
-    animation: appearance .3s forwards;
+    transform: translate(-24px, 150%);
+    animation: appearance .3s forwards!important;
     transition: all 0.5s;
     z-index: 1000;
 
@@ -43,7 +43,7 @@
 
 @keyframes appearance {
     0%{
-        transform: translate(-24px, 100%);
+        transform: translate(-24px, 150%);
     }
     100%{
         transform: translate(-24px, -24px);
@@ -52,7 +52,7 @@
 
 @keyframes fadeBtn {
     0%{
-        transform: translate(-24px, -24px);
+        // transform: translate(-24px, -24px);
     }
     100%{
         transform: translate(-24px, 150%);
