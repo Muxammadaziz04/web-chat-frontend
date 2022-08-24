@@ -2,16 +2,14 @@ import { combineReducers, createStore } from "redux";
 
 import contactInfoReducer from "../reducers/contactInfoReducer";
 import searchReducer from "../reducers/searchReducer";
-import ButtonToScrollReducer from "../reducers/ButtontToScrollReducer";
-import scrollPosReducer from "../reducers/ScrollPosReducer";
-import chatReducer from "../reducers/ChatReducer";
+import companionReducer from "../reducers/CompanionReducer";
+import dialogsReducer from "../reducers/dialogsReducer";
 
 const rootReducer = combineReducers({
     contactInfoReducer,
     searchReducer,
-    ButtonToScrollReducer,
-    scrollPosReducer,
-    chatReducer
+    companionReducer,
+    dialogsReducer
 })
 
 export const store = createStore(rootReducer)

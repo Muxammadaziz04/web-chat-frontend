@@ -1,29 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 import LetteredAvatar from 'react-lettered-avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import getTimes from '../../../Utils';
+import { setCompanion } from '../../../redux/actions/CompanionAction';
 
 import style from './Item.module.scss'
 
 const ChatItem = ({ chat }) => {
-    const getUserMessage = () => ({
+    const dispatch = useDispatch()
+console.log('item');
+    const getUserData = (chat) => ({
         user: chat?.companion[0],
         message: chat?.last_message[0]?.message_body,
         time: getTimes(chat?.last_message[0]?.created_at).time
     })
     
+    const { user, message, time } = getUserData(chat)
+
     const handleClick = (e) => {
         const items = document.querySelectorAll('[data-item]')
-
+        
         items.forEach((item) => {
             item.classList.remove(`${style.profile__active}`)
         })
         e.target.closest('li').classList.add(`${style.profile__active}`)
+
+        dispatch(setCompanion(user))
     }
-    
-    const { user, message, time } = getUserMessage()
 
     return (
         <Link to={`/dialog/${chat?.dialog_id}`}>
@@ -64,4 +70,4 @@ const ChatItem = ({ chat }) => {
     );
 }
 
-export default React.memo(ChatItem);
+export default ChatItem;

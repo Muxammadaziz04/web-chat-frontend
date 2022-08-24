@@ -1,6 +1,6 @@
 import style from './Date.module.scss'
 
-const MessagesDate = ({text}) => {
+const MessageDate = ({text}) => {
     return (
         <h6 className={style.messages__date}>
             {text}
@@ -8,4 +8,4 @@ const MessagesDate = ({text}) => {
     );
 }
 
-export default MessagesDate;
+export default MessageDate;

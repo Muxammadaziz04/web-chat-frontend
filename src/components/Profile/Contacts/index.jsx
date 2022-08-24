@@ -1,16 +1,18 @@
+import LetteredAvatar from 'react-lettered-avatar';
+
 import style from './Contacts.module.scss'
 
-const Contacts = () => {
+const Contacts = ({ companion }) => {
     return (
         <div className={style.contacts}>
             <div className={style.contacts__img}>
-                <img
-                    src='https://images.unsplash.com/photo-1659348448223-e0d51c69d43e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxOHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
-                    alt="profile img"
-                />
+                {
+                    companion.user_avatar ? <img src={companion.user_avatar} alt="profile img" /> 
+                    : <LetteredAvatar name={companion.fullname} size={124} />
+                }
             </div>
-            <p className={style.contacts__name}>Lara Mueller</p>
-            <p className={style.contacts__contact}>+49 1522 792358</p>
+            <p className={style.contacts__name}>{companion.fullname}</p>
+            <p className={style.contacts__contact}>{companion.email}</p>
         </div>
     );
 }

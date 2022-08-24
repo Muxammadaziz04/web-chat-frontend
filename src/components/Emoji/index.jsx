@@ -9,7 +9,7 @@ const Emoji = ({pickEmoji}) => {
         <span className={style.emoji}>
             <Picker
                 data={data}
-                onEmojiSelect={({native}) => pickEmoji(native)}
+                onEmojiSelect={(emoji) => console.log(emoji)}
                 set="apple"
                 emojiVersion="14"
                 navPosition="bottom"

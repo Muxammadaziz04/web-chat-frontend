@@ -1,9 +1,10 @@
 const actions = {
+    openContactInfo: () => ({
+        type: 'openContactInfo'
+    }),
     closeContactInfo: () => ({
         type: 'closeContactInfo'
-    }),
-    openContactInfo: () => ({
-        type: 'openContactInfo',
-    })
+    })    
 }
+
 export default actions
