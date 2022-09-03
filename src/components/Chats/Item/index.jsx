@@ -11,7 +11,7 @@ import style from './Item.module.scss'
 
 const ChatItem = ({ chat }) => {
     const dispatch = useDispatch()
-console.log('item');
+    
     const getUserData = (chat) => ({
         user: chat?.companion[0],
         message: chat?.last_message[0]?.message_body,
@@ -58,7 +58,7 @@ console.log('item');
                     </span>
                     <span className={style.profile__info}>
                         {
-                            message && <p className={style.profile__message}>{message}</p>
+                            message && <p className={style.profile__message} dangerouslySetInnerHTML={{__html: message}}></p>
                         }
                         {
                             user?.notificate && <span className={style.profile__notificate}>{user?.notificate}</span>

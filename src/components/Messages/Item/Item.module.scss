@@ -37,6 +37,8 @@
     font-size: 14px;
     line-height: 20px;
     position: relative;
+    display: flex;
+    align-items: center;
 
     &::before{
         content: '';

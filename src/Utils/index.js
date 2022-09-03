@@ -14,7 +14,7 @@ const getTimes = (date) => {
 
     const year = date.getFullYear() || ''
     const month = date.getMonth() + 1 || ''
-    const day = date.getDay() || ''
+    const day = date.getDate() || ''
     const hour = date.getHours() + (currentTimeZone - dateTimeZone) || ''
     const minutes = date.getMinutes() || ''
     const time = date.toLocaleTimeString().slice(0, 5) || ''

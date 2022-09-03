@@ -14,7 +14,7 @@ const Chats = () => {
     const [loader, setLoader] = useState(false)
 
     const dialogs = useSelector(state => state.dialogsReducer)
-    console.log(dialogs);
+    
     // useEffect(() => {
     //     setLoader(true)
     //     fetch(`${host}/dialogs`, { headers: { token } })

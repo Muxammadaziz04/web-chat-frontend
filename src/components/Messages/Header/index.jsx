@@ -17,7 +17,7 @@ const MessagesHeader = () => {
         dispatch(isOpen ? closeContactInfo() : openContactInfo())
     }
 
-    const currentFullDate = getTimes(new Date).fullDate
+    const currentFullDate = getTimes(new Date()).fullDate
     const { time, fullDate } = getTimes(companion.last_seem)
 
     return (

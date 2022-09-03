@@ -1,0 +1,48 @@
+.input{
+    max-width: 100% !important;
+    background: #26272D;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    line-height: 22px;
+    min-height: 40px;
+    max-height: 150px;
+    padding: 9px 12px;
+    margin: 0 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    outline: none;
+    border: none;
+    white-space: pre-wrap;
+
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+    &:empty:before {
+        content: attr(data-placeholder);
+        color: darkgrey;
+        letter-spacing: 0.8px;
+    }
+    & > * {
+        display: inline !important;;
+        white-space:nowrap;
+
+        & > *{
+            display: inline !important;;
+        white-space:nowrap;
+        }
+    }
+}
+
+// .img{
+//     position: relative !important;
+//     display: inline-block;
+//     width: 22px!important;
+//     height: 22px !important;
+//     & > img{
+//         position: absolute!important;
+//         top: 0;
+//         left: 0;
+//         transform: translate(0, 17%);
+//     }
+// }

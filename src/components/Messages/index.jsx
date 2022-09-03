@@ -55,7 +55,3 @@ const Messages = () => {
 }
 
 export default Messages;
-//import data from '@emoji-mart/data'
-//import { init } from 'emoji-mart'
-//init({ data })
-//<em-emoji id="wink" size="24px" set='apple'></em-emoji>

@@ -20,13 +20,16 @@ const MessageItem = ({message}) => {
         // }
     // });
     const {time} = getTimes(message.created_at)
-
+    const msg = message.message_body
+    
     return (
         <>
-            <p className={`${message.message_from === '0912eee5-1b21-4b4e-82c4-af4439be2d03' ? style.message__item__from : style.message__item}`} id={message.message_id}>
-                {
-                    message.message_body
-                }
+            <p 
+                className={`${message.message_from === '0912eee5-1b21-4b4e-82c4-af4439be2d03' ? style.message__item__from : style.message__item}`} 
+                id={message.message_id}
+                dangerouslySetInnerHTML={{__html: msg}}
+            >
+                
             </p>
             <MessagesStatus viewed={message.viewed} time={time} message_from={message.message_from}  />
         </>
