@@ -1,6 +1,6 @@
 .profile {
-    max-width: 25%;
-    min-width: 25%;
+    max-width: calc(25% * 1.33);
+    min-width: calc(25% * 1.33);
     max-height: 100vh;
     height: 100%;
     border-left: 1px solid #37393C;

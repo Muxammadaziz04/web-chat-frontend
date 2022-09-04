@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 // import LetteredAvatar from 'react-lettered-avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
@@ -41,4 +41,4 @@ const ChatsHeader = () => {
     );
 }
 
-export default ChatsHeader;
+export default React.memo(ChatsHeader);

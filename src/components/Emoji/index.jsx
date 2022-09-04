@@ -18,4 +18,4 @@ const Emoji = ({pickEmoji}) => {
     );
 }
 
-export default Emoji;
+export default React.memo(Emoji);

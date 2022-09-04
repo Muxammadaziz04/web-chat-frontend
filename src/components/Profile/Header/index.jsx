@@ -1,3 +1,4 @@
+import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import contactActions from '../../../redux/actions/contactInfoAction'
@@ -20,4 +21,4 @@ const Header = () => {
     );
 }
 
-export default Header;
+export default React.memo(Header);

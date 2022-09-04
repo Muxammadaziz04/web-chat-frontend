@@ -1,4 +1,4 @@
-export const setCompanion = (payload) => ({
+export const setCompanionAction = (payload) => ({
     type: 'SET_COMPANION',
     payload
 })

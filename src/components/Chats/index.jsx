@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Item from "./Item";
 import Header from './Header';
 import Search from "./Search";
+import Loader from "../Loader";
+import { socket } from "../../socket";
+import DeafultChatsComponent from "./DefaultChatsComponent";
 
 import style from './Chats.module.scss'
-import DeafultChatsComponent from "./DefaultChatsComponent";
-import Loader from "../Loader";
+import { newMessage } from "../../redux/actions/dialogsAction";
+import { useCallback } from "react";
 
 
 const Chats = () => {
-    const [loader, setLoader] = useState(false)
+    const dispatch = useDispatch()
+    const { data: dialogs, loading } = useSelector(state => state.dialogsReducer)
 
-    const dialogs = useSelector(state => state.dialogsReducer)
-    
     // useEffect(() => {
     //     setLoader(true)
     //     fetch(`${host}/dialogs`, { headers: { token } })
@@ -29,6 +31,15 @@ const Chats = () => {
     //         })
     // }, [])
 
+    const func = useCallback(data => {
+        dispatch(newMessage(data))
+    }, [dispatch])
+
+    useEffect(() => {
+        socket.on('NEW_MESSAGE', func)
+        return () => socket.off('NEW_MESSAGE', func)
+    }, [func])
+
     return (
         <aside className={style.chats}>
             <Header />
@@ -37,8 +48,9 @@ const Chats = () => {
                 <h2 className={style.chats__title}>Messages</h2>
                 <ul className={style.chats__list}>
                     {
-                        loader ? <Loader /> :
-                            dialogs && dialogs.length ? dialogs.map(dialog => <Item chat={dialog} key={dialog.dialog_id} />)
+                        loading ? <Loader /> :
+                            dialogs && dialogs.length ?
+                                dialogs.map(dialog => <Item chat={dialog} key={dialog.dialog_id} />)
                                 : <DeafultChatsComponent />
                     }
                 </ul>
@@ -47,4 +59,4 @@ const Chats = () => {
     );
 }
 
-export default Chats;
+export default React.memo(Chats);

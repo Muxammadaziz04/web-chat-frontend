@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import Contacts from './Contacts';
@@ -6,19 +7,18 @@ import Info from './Info';
 
 import style from './Profile.module.scss'
 
-const Profile = () => {
+const Profile = ({ user }) => {
     const isOpen = useSelector(state => state.contactInfoReducer.isOpen)
-    const companion = useSelector(state => state.companionReducer)
 
-    if(!isOpen) return <></>
-    
+    if (!isOpen) return <></>
+
     return (
         <aside className={style.profile}>
             <Header />
-            <Contacts companion={companion}/>
+            <Contacts user={user} />
             <Info />
         </aside>
     );
 }
 
-export default Profile;
+export default React.memo(Profile);

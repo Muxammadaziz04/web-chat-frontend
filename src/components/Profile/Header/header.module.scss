@@ -1,11 +1,14 @@
 .header {
     width: 100%;
-    padding: 21px 24px;
+    padding: 21.5px 24px;
     border-bottom: 1px solid #37393C;
     display: flex;
     align-items: center;
 
     & > button {
+        min-width: 24px;
+        min-height: 24px;
+        display: flex;
         background: inherit;
         border: none;
         margin-right: 8px;
@@ -16,6 +19,7 @@
         font-weight: 600;
         font-size: 16px;
         line-height: 24px;
+        min-height: 24px;
         color: #FFFFFF;
     }
 }

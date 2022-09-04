@@ -1,3 +1,5 @@
+import React from 'react';
+
 import style from './Info.module.scss'
 
 const Info = () => {
@@ -9,4 +11,4 @@ const Info = () => {
     );
 }
 
-export default Info;
+export default React.memo(Info);

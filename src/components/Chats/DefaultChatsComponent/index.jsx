@@ -8,7 +8,7 @@ const DeafultChatsComponent = () => {
     return (
         <div className={style.block}>
             <img src={PersonsIcon} alt="icon" />
-            <p>rxdtcfyvgubhnjklm</p>
+            <p>Welcome to chat</p>
         </div>
     );
 }
