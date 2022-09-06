@@ -4,9 +4,9 @@ import { changeStatus, setDialogs } from "../redux/actions/dialogsAction"
 
 const userJoin = (socket, dialogs) => {
     socket.emit('USER_JOIN', {
-        email: JSON.parse(localStorage.getItem('email')) || 'muxammadazizramziddinov@gmail.com',
+        user_id: JSON.parse(localStorage.getItem('user_id')) || '0912eee5-1b21-4b4e-82c4-af4439be2d03',
         id: socket.id,
-        companions: dialogs?.map(dialog => dialog.companion[0].email)
+        companions: dialogs?.map(dialog => dialog.companion[0].user_id)
     })
 }
 

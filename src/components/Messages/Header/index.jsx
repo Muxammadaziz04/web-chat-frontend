@@ -26,7 +26,7 @@ const Header = ({ user }) => {
     }
     
     const setStatus = useCallback(data => {
-        if (data.user === user.email) {
+        if (data.user_id === user.user_id) {
             user.user_action = data.status
             user.last_seem = data.status === 'online' ? user.last_seem : Date.now()
             setIsOnline(data.status === 'online' ? true : false)

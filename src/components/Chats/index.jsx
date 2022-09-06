@@ -32,7 +32,9 @@ const Chats = () => {
     // }, [])
 
     const func = useCallback(data => {
-        dispatch(newMessage(data))
+        setTimeout(() => {
+            dispatch(newMessage(data))
+        }, 10)
     }, [dispatch])
 
     useEffect(() => {

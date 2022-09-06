@@ -1,19 +1,22 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import smileIcon from '../../../Assets/smile.svg'
 import sendIcon from '../../../Assets/send.svg'
 import { host, token } from '../../../constants';
+import { socket } from '../../../socket';
+import { newMessage } from '../../../redux/actions/dialogsAction'
 import Emoji from '../../Emoji';
 
 import style from './Footer.module.scss'
-import { socket } from '../../../socket';
 
-const MessagesFooter = ({setMessages}) => {
+const Footer = ({ setMessages }) => {
     const inputRef = useRef()
+    const dispatch = useDispatch()
+    const { companion_id } = useParams()
     const [message, setMessage] = useState('')
     const [visible, setVisible] = useState(false)
-    const { companion_email, dialog_id } = useSelector(state => state.companionReducer)
 
     const pickEmoji = useCallback((emoji) => {
         inputRef.current.focus()
@@ -25,10 +28,6 @@ const MessagesFooter = ({setMessages}) => {
         }, 0)
     }, [message])
 
-    const handleClickIcon = () => {
-        setVisible(state => !state)
-    }
-
     const sendMessage = async () => {
         const msg = inputRef.current.value.trim()
         if (msg) {
@@ -38,13 +37,14 @@ const MessagesFooter = ({setMessages}) => {
                 body: JSON.stringify({ message_body: msg })
             }
 
-            let res = await fetch(`${host}/message/${dialog_id}`, options)
+            let res = await fetch(`${host}/message/${companion_id}`, options)
             res = await res.json()
 
             if (res.status === 201) {
-                inputRef.current.value = ''
+                setMessage('')
                 setMessages(state => [...state, res.data[0]])
-                socket.emit('SEND_MESSAGE', { companion_email, dialog_id, data: res.data[0] })
+                socket.emit('SEND_MESSAGE', { companion_id, data: res.data[0] })
+                dispatch(newMessage({data: res.data[0]}))
             } else {
                 console.log(res);
                 alert('Somethink went wrong. Please try again')
@@ -56,7 +56,7 @@ const MessagesFooter = ({setMessages}) => {
         <div className={style.footer}>
             {visible ? <Emoji pickEmoji={pickEmoji} /> : <></>}
 
-            <button className={style.footer__btn} data-type="emoji" onClick={handleClickIcon}>
+            <button className={style.footer__btn} data-type="emoji" onClick={() => setVisible(state => !state)}>
                 <img src={smileIcon} alt="icon" />
             </button>
 
@@ -76,4 +76,4 @@ const MessagesFooter = ({setMessages}) => {
     );
 }
 
-export default React.memo(MessagesFooter);
+export default React.memo(Footer);

@@ -12,3 +12,8 @@ export const newMessage = (payload) => ({
     type: 'NEW_MESSAGE',
     payload
 })
+
+export const msgViewed = (payload) => ({
+    type: 'MSG_VIEWED',
+    payload
+})
