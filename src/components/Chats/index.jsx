@@ -17,20 +17,6 @@ const Chats = () => {
     const dispatch = useDispatch()
     const { data: dialogs, loading } = useSelector(state => state.dialogsReducer)
 
-    // useEffect(() => {
-    //     setLoader(true)
-    //     fetch(`${host}/dialogs`, { headers: { token } })
-    //         .then(res => res.json())
-    //         .then(res => {
-    //             if (res.status === 200) {
-    //                 setDialogs(res.data)
-    //                 setLoader(false)
-    //             } else {
-    //                 alert('Somethink went wrong. Please reload the app')
-    //             }
-    //         })
-    // }, [])
-
     const func = useCallback(data => {
         setTimeout(() => {
             dispatch(newMessage(data))

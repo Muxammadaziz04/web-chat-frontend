@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
+import React, { useEffect, useState, useRef, useCallback, useLayoutEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -26,6 +26,7 @@ const Messages = () => {
 
     const newMessage = useCallback(data => {
         companion_id === data.companion_id && setMessages(state => [...state, data.data])
+        setVisible(true)
     }, [companion_id])
 
     const handleScroll = () => {
@@ -46,15 +47,24 @@ const Messages = () => {
         prevScrollpos.current = currentScrollPos;
     }
 
-    const getScrollHeight = useCallback(() => {
+    const scrollHeight = useMemo(() => {
+        const positionObj = JSON.parse(localStorage.getItem('scrollPos'))
         const firstNewMessageId = messages?.find(msg => !msg.viewed && msg.message_from !== user_id)?.message_id || null
-        if (firstNewMessageId) {
+        if(positionObj){
+            return positionObj[companion_id]
+        } else if (firstNewMessageId) {
             const msg = document.getElementById(firstNewMessageId)
             return msg?.offsetTop
         } else {
             return containerRef.current?.scrollHeight
         }
-    }, [messages])
+    }, [messages, companion_id])    
+
+    useEffect(() => {
+        const positionObj = JSON.parse(localStorage.getItem('scrollPos')) || {}
+        positionObj[companion_id] = containerRef.current.scrollTop
+        localStorage.setItem('scrollPos', JSON.stringify(positionObj))
+    }, [companion_id])
 
     useEffect(() => {
         socket.on('NEW_MESSAGE', newMessage)
@@ -62,9 +72,8 @@ const Messages = () => {
     }, [newMessage])
 
     useLayoutEffect(() => {
-        const scrollSize = getScrollHeight()
-        containerRef.current.scrollTo({ top: scrollSize })
-    }, [getScrollHeight])
+        containerRef.current.scrollTo({ top: scrollHeight })
+    }, [scrollHeight])
 
     useEffect(() => {
         setLoading(true)
