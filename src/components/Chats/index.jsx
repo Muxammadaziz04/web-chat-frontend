@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import Item from "./Item";
@@ -7,20 +7,19 @@ import Search from "./Search";
 import Loader from "../Loader";
 import { socket } from "../../socket";
 import DeafultChatsComponent from "./DefaultChatsComponent";
+import { newMessage } from "../../redux/actions/dialogsAction";
 
 import style from './Chats.module.scss'
-import { newMessage } from "../../redux/actions/dialogsAction";
-import { useCallback } from "react";
 
 
 const Chats = () => {
     const dispatch = useDispatch()
-    const { data: dialogs, loading } = useSelector(state => state.dialogsReducer)
+    const { dialogs, loading } = useSelector(state => state.dialogsReducer)
 
     const func = useCallback(data => {
         setTimeout(() => {
             dispatch(newMessage(data))
-        }, 10)
+        }, 0)
     }, [dispatch])
 
     useEffect(() => {
@@ -38,9 +37,19 @@ const Chats = () => {
                     {
                         loading ? <Loader /> :
                             dialogs && dialogs.length ?
-                                dialogs.map(dialog => <Item chat={dialog} key={dialog.dialog_id} />)
+                                dialogs.map(user => <Item chat={user} key={user.dialog_id} />)
                                 : <DeafultChatsComponent />
                     }
+                    {/* {
+                        finded_users.length > 0 && (
+                            <>
+                                <h2 className={style.chats__title}>Finded users</h2>
+                                {
+                                    finded_users.map(user => <Fided chat={user} key={user.dialog_id} />)
+                                }
+                            </>
+                        )
+                    } */}
                 </ul>
             </div>
         </aside>

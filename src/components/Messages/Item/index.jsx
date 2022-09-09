@@ -28,16 +28,16 @@ const Item = ({ message }) => {
         }
     }
 
-    const func = useCallback((data) => {
+    const handeChangeStatus = useCallback((data) => {
         if (data.message_id === message.message_id) {
             setViewed(true)
         }
     }, [message])
 
     useEffect(() => {
-        socket.on('CHANGE_MSG_STATUS', func)
-        return () => socket.off('MESSAGE_VIEWED', func)
-    }, [func])
+        socket.on('CHANGE_MSG_STATUS', handeChangeStatus)
+        return () => socket.off('MESSAGE_VIEWED', handeChangeStatus)
+    }, [handeChangeStatus])
 
     useEffect(() => {
         setViewed(message.viewed)

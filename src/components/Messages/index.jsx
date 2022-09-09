@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback, useLayoutEffect, useMemo } from "react";
+import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import Header from "./Header";
 import Footer from "./Footer";
@@ -14,10 +13,10 @@ import { host, token, user_id } from '../../constants'
 import styles from './Messages.module.scss';
 
 const Messages = () => {
-    const scrollToRef = useRef(0)
+    const scrollToRef = useRef({scrollPos: 0})
     const containerRef = useRef()
     const prevScrollpos = useRef(0)
-    const dispatch = useDispatch()
+    const prevCompanionId = useRef(null)
     const { companion_id } = useParams()
     const [messages, setMessages] = useState([])
     const [visible, setVisible] = useState(false)
@@ -35,36 +34,48 @@ const Messages = () => {
         const scrollHeight = containerRef?.current?.scrollHeight
 
         if (prevScrollpos.current > currentScrollPos || currentScrollPosWithBottom === scrollHeight) {
-            scrollToRef.current = {scrollPos: currentScrollPos, direction: 'top'}
+            scrollToRef.current = { scrollPos: currentScrollPos, direction: 'top' }
             setVisible(false)
         } else {
-            scrollToRef.current = {...scrollToRef.current, direction: 'bottom'}
+            scrollToRef.current = { ...scrollToRef.current, direction: 'bottom' }
         }
-        
-        if(scrollToRef.current.direction === 'bottom' && (currentScrollPos - scrollToRef.current.scrollPos) >= 300){
+
+        if (scrollToRef.current.direction === 'bottom' && (currentScrollPos - scrollToRef.current.scrollPos) >= 250) {
             setVisible(true)
         }
         prevScrollpos.current = currentScrollPos;
     }
 
-    const scrollHeight = useMemo(() => {
-        const positionObj = JSON.parse(localStorage.getItem('scrollPos'))
-        const firstNewMessageId = messages?.find(msg => !msg.viewed && msg.message_from !== user_id)?.message_id || null
-        if(positionObj){
-            return positionObj[companion_id]
-        } else if (firstNewMessageId) {
-            const msg = document.getElementById(firstNewMessageId)
-            return msg?.offsetTop
+    const getScrollHeight = useCallback(() => {
+        if (messages.length && prevCompanionId.current !== companion_id) {
+            const positionObj = JSON.parse(localStorage.getItem('scrollPos'))
+            const firstNewMessageId = messages?.find(msg => !msg.viewed && msg.message_from !== user_id)?.message_id || null
+            if (positionObj[companion_id] >= 0) {
+                return positionObj[companion_id]
+            } else if (firstNewMessageId) {
+                const msg = document.getElementById(firstNewMessageId)
+                return msg?.offsetTop
+            } else {
+                return containerRef.current?.scrollHeight
+            }
         } else {
-            return containerRef.current?.scrollHeight
+            return null
         }
-    }, [messages, companion_id])    
+    }, [messages, companion_id])
 
     useEffect(() => {
-        const positionObj = JSON.parse(localStorage.getItem('scrollPos')) || {}
-        positionObj[companion_id] = containerRef.current.scrollTop
-        localStorage.setItem('scrollPos', JSON.stringify(positionObj))
-    }, [companion_id])
+        if (messages.length) {
+            const positionObj = JSON.parse(localStorage.getItem('scrollPos')) || {}
+            positionObj[prevCompanionId.current] = prevScrollpos.current
+            localStorage.setItem('scrollPos', JSON.stringify(positionObj))
+            prevCompanionId.current = companion_id
+        }
+        return () => {
+            const positionObj = JSON.parse(localStorage.getItem('scrollPos')) || {}
+            positionObj[companion_id] = prevScrollpos.current
+            localStorage.setItem('scrollPos', JSON.stringify(positionObj))
+        }
+    }, [companion_id, messages])
 
     useEffect(() => {
         socket.on('NEW_MESSAGE', newMessage)
@@ -72,8 +83,11 @@ const Messages = () => {
     }, [newMessage])
 
     useLayoutEffect(() => {
-        containerRef.current.scrollTo({ top: scrollHeight })
-    }, [scrollHeight])
+        const scrollSize = getScrollHeight()
+        if(scrollSize !== null) {
+            containerRef.current.scrollTo({ top: scrollSize })
+        }
+    }, [getScrollHeight])
 
     useEffect(() => {
         setLoading(true)
@@ -85,7 +99,7 @@ const Messages = () => {
                 setLoading(false)
             })
             .catch(() => alert('Somethink went wrong. Please try again'))
-    }, [companion_id, dispatch])
+    }, [companion_id])
 
     return (
         <>
@@ -98,9 +112,9 @@ const Messages = () => {
                                 messages?.length > 0 && <RenderMessages messages={messages} />
                         }
                     </div>
-                    {visible && <ScrollButton containerRef={containerRef} visible={visible} />}
+                    {visible && <ScrollButton containerRef={containerRef} />}
                 </div>
-                <Footer setMessages={setMessages} />
+                <Footer setMessages={setMessages} container={containerRef} />
             </div>
             <Profile user={companion} />
         </>

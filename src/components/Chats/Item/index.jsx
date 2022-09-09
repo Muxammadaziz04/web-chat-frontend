@@ -7,7 +7,7 @@ import getTimes from '../../../Utils';
 
 import style from './Item.module.scss'
 
-const ChatItem = ({ chat }) => {
+const ChatItem = ({ chat, finded_user = false }) => {
     const { user, message, time, notificate } = {
         user: chat?.companion[0],
         message: chat?.last_message[0]?.message_body,
@@ -44,14 +44,14 @@ const ChatItem = ({ chat }) => {
                 <span>
                     <span className={style.profile__info}>
                         <p className={style.profile__name}>{user.fullname || ''}</p>
-                        <time className={style.profile__time}>{time || ''}</time>
+                        <time className={style.profile__time}>{!finded_user && (time || '')}</time>
                     </span>
                     <span className={style.profile__info}>
                         {
-                            message && <p className={style.profile__message} dangerouslySetInnerHTML={{ __html: message}}></p>
+                            message && <p className={style.profile__message}>{finded_user ? `@${user.username}` : message}</p>
                         }
                         {
-                            notificate > 0 && <span className={style.profile__notificate}>{notificate}</span>
+                            notificate > 0 && !finded_user && <span className={style.profile__notificate}>{notificate}</span>
                         }
                     </span>
                 </span>

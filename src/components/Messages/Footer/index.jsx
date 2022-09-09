@@ -11,7 +11,7 @@ import Emoji from '../../Emoji';
 
 import style from './Footer.module.scss'
 
-const Footer = ({ setMessages }) => {
+const Footer = ({ setMessages, container }) => {
     const inputRef = useRef()
     const dispatch = useDispatch()
     const { companion_id } = useParams()
@@ -36,15 +36,17 @@ const Footer = ({ setMessages }) => {
                 headers: { 'Content-Type': 'application/json', token },
                 body: JSON.stringify({ message_body: msg })
             }
-
             let res = await fetch(`${host}/message/${companion_id}`, options)
             res = await res.json()
 
             if (res.status === 201) {
                 setMessage('')
-                setMessages(state => [...state, res.data[0]])
-                socket.emit('SEND_MESSAGE', { companion_id, data: res.data[0] })
+                setMessages(state => [...state, res.data])
+                socket.emit('SEND_MESSAGE', { companion_id, data: res.data })
                 dispatch(newMessage({data: res.data[0]}))
+                setTimeout(() => {
+                    container.current.scrollTo({top: container?.current.scrollHeight + container?.current.clientHeight})
+                }, 0) 
             } else {
                 console.log(res);
                 alert('Somethink went wrong. Please try again')

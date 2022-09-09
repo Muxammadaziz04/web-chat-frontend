@@ -14,8 +14,8 @@ export const userConnect = async (socket, dispatch)=> {
     dispatch(setDialogs({data: [], loading: true}))
     let res = await fetch(`${host}/dialogs`, { headers: { token } })
     res = await res.json()
-    dispatch(setDialogs({data: res.data, loading: false}))
-    userJoin(socket, res.data)
+    dispatch(setDialogs({dialogs: res.data.dialogs, loading: false}))
+    userJoin(socket, res.data.dialogs)
 }
 
 export const newUser = (data, dispatch) => dispatch(changeStatus(data))

@@ -14,8 +14,8 @@ import style from './Header.module.scss'
 
 const Header = ({ user }) => {
     const dispatch = useDispatch()
-    const { openContactInfo, closeContactInfo } = actions
     const [isOnline, setIsOnline] = useState(false)
+    const { openContactInfo, closeContactInfo } = actions
     const isOpen = useSelector(state => state.contactInfoReducer.isOpen)
     
     const currentFullDate = getTimes(new Date()).fullDate

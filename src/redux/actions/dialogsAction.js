@@ -3,6 +3,11 @@ export const setDialogs = (payload) => ({
     payload
 })
 
+export const setSearch = (payload) => ({
+    type: 'SET_SEARCH',
+    payload
+})
+
 export const changeStatus = (payload) => ({
     type: 'CHANGE_STATUS',
     payload
