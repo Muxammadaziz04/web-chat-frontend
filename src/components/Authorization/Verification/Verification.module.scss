@@ -1,0 +1,55 @@
+.verification{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+
+    & > h1{
+        font-weight: 700;
+        font-size: 38px;
+        line-height: 42px;
+        text-transform: capitalize;
+        color: #FFFFFF;
+        margin-bottom: 30px;
+    }
+
+    & > p{
+        font-weight: 400;
+        font-size: 22px;
+        line-height: 28px;
+        letter-spacing: 0.32px;
+        color: #FFFFFF;
+        margin-bottom: 22px;
+    }
+
+    &__field{
+        display: flex;
+
+        & > input{
+            width: 64px;
+            font-size: 32px;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            border: 2px solid #55525c;
+            font-weight: 700;
+            color: white;
+            background: #191919;
+            outline: none;
+            margin: 0 15px;
+            transition: all 0.2s;
+
+            &:focus{
+                border: 2px solid rgb(0, 177, 227);
+                box-shadow: 5px 5px 25px rgba(0, 177, 227, 0.3);
+            }
+
+            &:disabled{
+                opacity: 0.5;
+            }
+        }
+    }
+}
