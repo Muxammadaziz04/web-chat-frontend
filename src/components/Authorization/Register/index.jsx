@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 
 import Form from '../Form';
 import Input from '../Input';
 import Button from '../Button';
-import {host} from '../../../constants'
+import {host, token} from '../../../constants'
 
 import style from '../Authorization.module.scss'
 
@@ -12,7 +12,8 @@ const Register = () => {
     const formRef = useRef()
     const navigate = useNavigate()
 
-    const sendForm = async() => {
+    const sendForm = async(e) => {
+        e.preventDefault()
         const form = formRef.current
         const body = JSON.stringify({
             first_name: form.first_name.value.trim(),
@@ -33,13 +34,16 @@ const Register = () => {
         if(res.status !== 201){
             alert(res.error || res.message)
         } else {
-            navigate(`/verification/${res.id}`)
+            localStorage.setItem('token', JSON.stringify(res.data.token))
+            navigate(`/`)
         }
     }
 
+    if(token) return <Navigate to='/' />
+
     return (
         <div className={style.authorization}>
-            <Form ref={formRef} onSubmit={sendForm}>
+            <Form formRef={formRef} onSubmit={sendForm}>
                 <h1 className={style.authorization__title}>Register</h1>
                 <Input text='First name' type='text' name='first_name' placeholder='First name (required)' />
                 <Input text='Last name' type='text' name='last_name' placeholder='Last name' />

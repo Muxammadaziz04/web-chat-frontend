@@ -50,7 +50,7 @@ const Messages = () => {
         if (messages.length && prevCompanionId.current !== companion_id) {
             const positionObj = JSON.parse(localStorage.getItem('scrollPos'))
             const firstNewMessageId = messages?.find(msg => !msg.viewed && msg.message_from !== user_id)?.message_id || null
-            if (positionObj[companion_id] >= 0) {
+            if (positionObj[companion_id]) {
                 return positionObj[companion_id]
             } else if (firstNewMessageId) {
                 const msg = document.getElementById(firstNewMessageId)
@@ -58,13 +58,13 @@ const Messages = () => {
             } else {
                 return containerRef.current?.scrollHeight
             }
-        } else {
+        } else {    
             return null
         }
     }, [messages, companion_id])
 
     useEffect(() => {
-        if (messages.length) {
+        if (messages.length && prevCompanionId.current !== companion_id) {
             const positionObj = JSON.parse(localStorage.getItem('scrollPos')) || {}
             positionObj[prevCompanionId.current] = prevScrollpos.current
             localStorage.setItem('scrollPos', JSON.stringify(positionObj))
@@ -84,8 +84,8 @@ const Messages = () => {
 
     useLayoutEffect(() => {
         const scrollSize = getScrollHeight()
-        if(scrollSize !== null) {
-            containerRef.current.scrollTo({ top: scrollSize })
+        if(scrollSize !== null && scrollSize !== 0) {
+            containerRef.current.scrollTo({top: scrollSize})
         }
     }, [getScrollHeight])
 

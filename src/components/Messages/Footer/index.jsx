@@ -43,9 +43,9 @@ const Footer = ({ setMessages, container }) => {
                 setMessage('')
                 setMessages(state => [...state, res.data])
                 socket.emit('SEND_MESSAGE', { companion_id, data: res.data })
-                dispatch(newMessage({data: res.data[0]}))
+                dispatch(newMessage({data: res.data, companion_id}))
                 setTimeout(() => {
-                    container.current.scrollTo({top: container?.current.scrollHeight + container?.current.clientHeight})
+                    container.current.scrollTo({top: container?.current.scrollHeight + container?.current.clientHeight, behavior: "smooth"})
                 }, 0) 
             } else {
                 console.log(res);

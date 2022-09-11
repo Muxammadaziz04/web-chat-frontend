@@ -16,7 +16,7 @@ const Profile = ({ user }) => {
         <aside className={style.profile}>
             <Header />
             <Contacts user={user} />
-            <Info />
+            <Info user={user} />
         </aside>
     );
 }

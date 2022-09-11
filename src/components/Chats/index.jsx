@@ -26,7 +26,7 @@ const Chats = () => {
         socket.on('NEW_MESSAGE', func)
         return () => socket.off('NEW_MESSAGE', func)
     }, [func])
-
+    
     return (
         <aside className={style.chats}>
             <Header />
@@ -40,16 +40,6 @@ const Chats = () => {
                                 dialogs.map(user => <Item chat={user} key={user.dialog_id} />)
                                 : <DeafultChatsComponent />
                     }
-                    {/* {
-                        finded_users.length > 0 && (
-                            <>
-                                <h2 className={style.chats__title}>Finded users</h2>
-                                {
-                                    finded_users.map(user => <Fided chat={user} key={user.dialog_id} />)
-                                }
-                            </>
-                        )
-                    } */}
                 </ul>
             </div>
         </aside>

@@ -22,12 +22,12 @@ const ChatItem = ({ chat, finded_user = false }) => {
     }
 
     return (
-        <Link to={`/dialog/${user.user_id}`}>
+        <Link to={`/dialog/${user?.user_id}`}>
             <li className={style.profile} data-item onClick={handleClick}>
-                <div className={`${style.profile__img} ${user.user_action === 'online' ? style.online : ''}`}>
+                <div className={`${style.profile__img} ${user?.user_action === 'online' ? style.online : ''}`}>
                     <span>
                         {
-                            user.user_avatar ?
+                            user?.user_avatar ?
                                 <LazyLoadImage
                                     src={user?.user_avatar}
                                     width="100%"
@@ -37,18 +37,18 @@ const ChatItem = ({ chat, finded_user = false }) => {
                                     placeholderSrc='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC'
                                     wrapperClassName={style.avatar}
                                 />
-                                : <LetteredAvatar name={user.fullname} />
+                                : <LetteredAvatar name={user?.fullname} />
                         }
                     </span>
                 </div>
                 <span>
                     <span className={style.profile__info}>
-                        <p className={style.profile__name}>{user.fullname || ''}</p>
+                        <p className={style.profile__name}>{user?.fullname || ''}</p>
                         <time className={style.profile__time}>{!finded_user && (time || '')}</time>
                     </span>
                     <span className={style.profile__info}>
                         {
-                            message && <p className={style.profile__message}>{finded_user ? `@${user.username}` : message}</p>
+                            message && <p className={style.profile__message}>{finded_user ? `@${user?.username}` : message}</p>
                         }
                         {
                             notificate > 0 && !finded_user && <span className={style.profile__notificate}>{notificate}</span>
