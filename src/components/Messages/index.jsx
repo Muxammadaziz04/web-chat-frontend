@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, useLayoutEffect } from "react";
+import React, { useEffect, useState, useRef, useCallback, useLayoutEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 import Header from "./Header";
@@ -46,9 +46,9 @@ const Messages = () => {
         prevScrollpos.current = currentScrollPos;
     }
 
-    const getScrollHeight = useCallback(() => {
-        if (messages.length && prevCompanionId.current !== companion_id) {
-            const positionObj = JSON.parse(localStorage.getItem('scrollPos'))
+    const getScrollHeight = useMemo(() => {
+        if (messages.length  && !loading) {
+            const positionObj = JSON.parse(localStorage.getItem('scrollPos')) || {}
             const firstNewMessageId = messages?.find(msg => !msg.viewed && msg.message_from !== user_id)?.message_id || null
             if (positionObj[companion_id]) {
                 return positionObj[companion_id]
@@ -61,10 +61,10 @@ const Messages = () => {
         } else {    
             return null
         }
-    }, [messages, companion_id])
+    }, [messages, companion_id, loading])
 
     useEffect(() => {
-        if (messages.length && prevCompanionId.current !== companion_id) {
+        if (messages.length && prevCompanionId.current !== companion_id && companion_id) {
             const positionObj = JSON.parse(localStorage.getItem('scrollPos')) || {}
             positionObj[prevCompanionId.current] = prevScrollpos.current
             localStorage.setItem('scrollPos', JSON.stringify(positionObj))
@@ -83,9 +83,8 @@ const Messages = () => {
     }, [newMessage])
 
     useLayoutEffect(() => {
-        const scrollSize = getScrollHeight()
-        if(scrollSize !== null && scrollSize !== 0) {
-            containerRef.current.scrollTo({top: scrollSize})
+        if(getScrollHeight) {
+            containerRef.current.scrollTo({top: getScrollHeight})
         }
     }, [getScrollHeight])
 

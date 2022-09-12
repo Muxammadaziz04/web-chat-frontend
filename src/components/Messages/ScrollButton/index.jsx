@@ -19,7 +19,7 @@ const ScrollButton = ({ containerRef }) => {
     }
 
     useEffect(() => {
-        setNotificate(dialogs?.find(dialog => dialog.dialog_members.includes(companion_id))?.notificate)
+        setNotificate(dialogs?.find(dialog => dialog.dialog_members?.includes(companion_id))?.notificate)
     }, [dialogs, companion_id])
 
     return (

@@ -8,4 +8,15 @@
     flex-grow: 1;
     height: 100vh;
     display: flex;
+    position: relative;
+}
+
+@media (max-width:680px) {
+    .dialogContainer{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 500;
+    }
 }

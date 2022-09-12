@@ -39,3 +39,21 @@
         background: rgba(0,0,0,0.4);
     }
 }
+
+@media (max-width:1300px) {
+    .chats{
+        min-width: 30%;
+    }
+}
+
+@media (max-width:1020px) {
+    .chats{
+        min-width: 50%;
+    }
+}
+
+@media (max-width:680px) {
+    .chats{
+        min-width: 100%;
+    }
+}

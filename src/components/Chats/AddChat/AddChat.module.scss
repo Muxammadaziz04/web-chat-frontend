@@ -15,7 +15,8 @@
 }
 
 .item {
-    width: 500px;
+    max-width: 500px;
+    width: 100%;
     padding: 30px;
     display: flex;
     flex-direction: column;
@@ -23,6 +24,7 @@
     justify-content: center;
     border-radius: 18px;
     background: #191919;
+    margin: 10px;
     animation: open 0.7s forwards;
 
     &>label {
@@ -48,7 +50,12 @@
             color: #FFFFFF;
             background: #393939;
             margin-top: 10px;
-            margin-bottom: 25px;
+        }
+
+        & > span{
+            margin-top: 10px;
+            color: red;
+            margin-bottom: 15px;
         }
     }
 
@@ -67,6 +74,10 @@
         color: black;
         background: #F1E0AC;
         border-radius: 10px;
+
+        &:disabled{
+            opacity: 0.5;
+        }
     }
 }
 

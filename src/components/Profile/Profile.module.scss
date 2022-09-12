@@ -4,4 +4,26 @@
     max-height: 100vh;
     height: 100%;
     border-left: 1px solid #37393C;
+    background: #1C1D22;
+}
+
+@keyframes openTable {
+    0% {
+        transform: translate(100%, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@media (max-width:1020px) {
+    .profile {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        z-index: 1000;
+        animation: openTable 0.3s forwards;
+    }
 }

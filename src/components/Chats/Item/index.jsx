@@ -10,8 +10,8 @@ import style from './Item.module.scss'
 const ChatItem = ({ chat, finded_user = false }) => {
     const { user, message, time, notificate } = {
         user: chat?.companion[0],
-        message: chat?.last_message[0]?.message_body,
-        time: getTimes(chat?.last_message[0]?.created_at).time,
+        message:  chat?.last_message && chat?.last_message[0]?.message_body,
+        time: chat?.last_message && getTimes(chat?.last_message[0]?.created_at).time,
         notificate: chat.notificate
     }
 

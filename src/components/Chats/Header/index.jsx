@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import LetteredAvatar from 'react-lettered-avatar';
+import { useNavigate } from 'react-router-dom';
 
 import newChatIcon from '../../../Assets/new-chat.svg'
 import dropIcon from '../../../Assets/3dot.svg'
@@ -10,10 +11,17 @@ import AddChat from '../AddChat';
 import Popup from '../Popup';
 
 const ChatsHeader = () => {
-    const user = useSelector(state => state.userReducer)
     const [isOpen, setIsOpen] = useState(false)
+    const navigate = useNavigate()
+    const user = useSelector(state => state.userReducer)
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isOpenPopup, setIsOpenPopup] = useState(false)
+
+    const logOut = () => {
+        localStorage.removeItem("token")
+        localStorage.removeItem('user_id')
+        navigate('/login')
+    }
 
     return (
         <div className={style.header}>
@@ -26,15 +34,17 @@ const ChatsHeader = () => {
             <button className={style.header__icons} onClick={() => setIsOpenModal(state => !state)}>
                 <img src={newChatIcon} alt="icon" />
             </button>
+
             <AddChat isOpen={isOpenModal} setIsOpen={setIsOpenModal} />
             {isOpenPopup ? <Popup visible={isOpenPopup} setVisible={setIsOpenPopup} /> : <></>}
+
             <span className={style.header__dropdown__wrapper}>
                 <button className={style.header__icons} onClick={() => setIsOpen(!isOpen)}>
                     <img src={dropIcon} alt="icon" />
                 </button>
                 <div className={style.header__dropdown + `${isOpen ? '' : ' close'}`}>
                     <button onClick={() => {setIsOpenPopup(state => !state); setIsOpen(false)}}>Settings</button>
-                    <button>Log uot</button>
+                    <button onClick={logOut}>Log uot</button>
                 </div>
             </span>
         </div>

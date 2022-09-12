@@ -24,7 +24,7 @@ const ChatsSearch = () => {
             <button>
                 <img src={SearchIcon} alt="icon" />
             </button>
-            <input type="text" placeholder="Search" onChange={handleChange} />
+            <input type="text" placeholder="Search" onChange={handleChange} disabled />
         </label>
     );
 }

@@ -1,4 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { host, token, user_id } from '../../../constants'
@@ -6,26 +8,28 @@ import { host, token, user_id } from '../../../constants'
 import style from './AddChat.module.scss'
 
 const AddChat = ({ isOpen, setIsOpen }) => {
-    const inpRef = useRef()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { register, formState: { errors, isValid }, handleSubmit, reset } = useForm({ mode: "onChange", })
 
-    const addDialog = async () => {
+    const addDialog = async (data) => {
         try {
-            if (inpRef.current.value.trim()) {
-                const options = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', token },
-                    body: JSON.stringify({ companion_email: inpRef.current.value.trim() })
-                }
-                let res = await fetch(`${host}/dialog`, options)
-                res = await res.json()
-                if (res.status === 201) {
-                    inpRef.current.value = null
-                    const companion_id = res.data.dialog_members.find(user => user !== user_id)
-                    if (companion_id) navigate(`/dialog/${companion_id}`)
-                } else {
-                    alert(res.error || res.message)
-                }
+            setIsOpen(false)
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', token },
+                body: JSON.stringify(data)
+            }
+            let res = await fetch(`${host}/dialog`, options)
+            res = await res.json()
+            
+            if (res.status === 201) {
+                const companion_id = res.data.dialog_members.find(user => user !== user_id)
+                if (companion_id) navigate(`/dialog/${companion_id}`)
+                dispatch({type: "NEW_MESSAGE", payload: res.data})
+                reset()
+            } else {
+                alert(res.error || res.message)
             }
         } catch (error) {
 
@@ -33,13 +37,14 @@ const AddChat = ({ isOpen, setIsOpen }) => {
     }
     return (
         <div className={isOpen ? style.wrapper : style.close} data-item="wrapper" onClick={(e) => e.target.dataset.item === 'wrapper' && setIsOpen(false)}>
-            <div className={style.item}>
+            <form className={style.item} onSubmit={handleSubmit(addDialog)}>
                 <label>
                     email
-                    <input type="text" ref={inpRef} />
+                    <input type="text" {...register('companion_email', {required: "Email is required", pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"})} />
+                    <span>{errors?.companion_email && (errors.companion_email.message || "Error")}</span>
                 </label>
-                <button onClick={() => { setIsOpen(false); addDialog() }}>Add</button>
-            </div>
+                <button disabled={!isValid}>Add</button>
+            </form>
         </div>
     );
 }

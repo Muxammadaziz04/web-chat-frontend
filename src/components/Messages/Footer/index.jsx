@@ -41,7 +41,7 @@ const Footer = ({ setMessages, container }) => {
 
             if (res.status === 201) {
                 setMessage('')
-                setMessages(state => [...state, res.data])
+                setMessages(state => [...state, (res.data?.last_message && res.data?.last_message[0]) || res.data])
                 socket.emit('SEND_MESSAGE', { companion_id, data: res.data })
                 dispatch(newMessage({data: res.data, companion_id}))
                 setTimeout(() => {
@@ -62,12 +62,13 @@ const Footer = ({ setMessages, container }) => {
                 <img src={smileIcon} alt="icon" />
             </button>
 
-            <textarea
+            <input
                 className={style.footer__input}
                 placeholder='Write a message'
                 ref={inputRef}
                 value={message}
                 onChange={e => setMessage(e.target.value)}
+                onKeyUp={e => e.keyCode === 13 && sendMessage()}
                 rows={4}
             />
 

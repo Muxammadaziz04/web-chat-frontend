@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import LetteredAvatar from 'react-lettered-avatar';
 import { useDispatch } from 'react-redux';
 
-import { host, token, user_id } from '../../../constants';
+import { host, token } from '../../../constants';
 import camera from '../../../Assets/camera.svg'
 
 import style from './Popup.module.scss'
@@ -40,7 +40,7 @@ const Popup = ({ setVisible }) => {
     }
 
     useEffect(() => {
-        fetch(`${host}/user/${user_id}`, { headers: { token } })
+        fetch(`${host}/userinfo`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
                 if (res.status === 200) {

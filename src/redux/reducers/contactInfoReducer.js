@@ -1,5 +1,5 @@
 const initialState = {
-    isOpen: true
+    isOpen: window.innerWidth > 1020 
 }
 
 const contactInfoReducer = (state = initialState, action) => {

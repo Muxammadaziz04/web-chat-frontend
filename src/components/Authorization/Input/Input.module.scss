@@ -7,6 +7,11 @@
     line-height: 22px;
     letter-spacing: 0.32px;
     color: #FFFFFF;
+    margin-bottom: 20px;
+    &>span{
+        margin-top: 10px;
+        color: red;
+    }
 }
 
 .input{
@@ -22,5 +27,4 @@
     color: #FFFFFF;
     background: #393939;
     margin-top: 10px;
-    margin-bottom: 30px;
 }

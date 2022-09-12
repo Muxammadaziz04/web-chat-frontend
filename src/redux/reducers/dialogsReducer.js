@@ -1,4 +1,4 @@
-import { host, user_id, token } from "../../constants"
+import { user_id } from "../../constants"
 
 const initialState = {
     dialogs: [],
@@ -18,9 +18,9 @@ const changeStatus = (state, payload) => {
 }
 
 const orderDialogs = (state, payload) => {
-    const dialog = state.dialogs.find(dialog => dialog.dialog_id === payload.data.dialog_id)
-
-    if (dialog) {
+    const dialog = state.dialogs.find(dialog => dialog.dialog_id === (payload.dialog_id || payload.data.dialog_id))
+    
+    if (dialog && payload.data) {
         let newData = state.dialogs.map(dialog => {
             if (dialog.dialog_id === payload.data?.dialog_id) {
                 dialog.last_message = [payload.data]
@@ -38,12 +38,9 @@ const orderDialogs = (state, payload) => {
         });
         return { dialogs: newData, loading: state.loading }
     } else {
-        fetch(`${host}/user/${payload.companion_id}`, { headers: { token } })
-            .then(res => res.json())
-            .then(res => {
-                const newData = [{ companion: [res.data], last_message: [payload.data], dialog_id: payload.data.dialog_id, notificate: 0 }, ...state.dialogs]
-                return { dialogs: newData, loading: state.loading }
-            })
+        console.log([payload, ...state.dialogs]);
+        const newData = [payload, ...state.dialogs]
+        return {dialogs: newData, loading: state.loading}
     }
 }
 
