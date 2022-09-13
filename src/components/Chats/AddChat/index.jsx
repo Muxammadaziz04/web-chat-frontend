@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { host, token, user_id } from '../../../constants'
+import { newMessage } from '../../../redux/actions/dialogsAction';
 
 import style from './AddChat.module.scss'
 
@@ -26,7 +27,8 @@ const AddChat = ({ isOpen, setIsOpen }) => {
             if (res.status === 201) {
                 const companion_id = res.data.dialog_members.find(user => user !== user_id)
                 if (companion_id) navigate(`/dialog/${companion_id}`)
-                dispatch({type: "NEW_MESSAGE", payload: res.data})
+                console.log(res.data);
+                dispatch(newMessage({...res.data, user: res.data.companion[0], data: {dialog_id :res.data.dialog_id}}))
                 reset()
             } else {
                 alert(res.error || res.message)

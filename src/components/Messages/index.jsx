@@ -24,9 +24,9 @@ const Messages = () => {
     const [companion, setCompanion] = useState({})
 
     const newMessage = useCallback(data => {
-        companion_id === data.companion_id && setMessages(state => [...state, data.data])
+        user_id === data.companion_id && setMessages(state => [...state, data.data])
         setVisible(true)
-    }, [companion_id])
+    }, [])
 
     const handleScroll = () => {
         const currentScrollPos = containerRef.current.scrollTop

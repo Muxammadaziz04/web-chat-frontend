@@ -15,6 +15,7 @@ const RenderMessages = ({ messages }) => {
             {
                 messages.length > 0 && messages.map(msg => {
                     const { fullDate: msgDate } = getTimes(msg.created_at)
+                    
                     const Message = (
                         <span key={msg.message_id} id={msg.message_id} style={{"display": "flex", "flexDirection": "column"}}>
                             {currentFullDate !== msgDate ? <DateItem date={msgDate} /> : <></>}

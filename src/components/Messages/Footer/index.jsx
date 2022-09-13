@@ -41,14 +41,13 @@ const Footer = ({ setMessages, container }) => {
 
             if (res.status === 201) {
                 setMessage('')
-                setMessages(state => [...state, (res.data?.last_message && res.data?.last_message[0]) || res.data])
-                socket.emit('SEND_MESSAGE', { companion_id, data: res.data })
-                dispatch(newMessage({data: res.data, companion_id}))
+                setMessages(state => [...state, res.data.msg])
+                socket.emit('SEND_MESSAGE', { companion_id, data: res.data.msg, dialog_id: res.data.msg.dialog_id, user: res.data.user })
+                dispatch(newMessage({ companion_id, data: res.data.msg, dialog_id: res.data.msg.dialog_id, user: res.data.user }))
                 setTimeout(() => {
                     container.current.scrollTo({top: container?.current.scrollHeight + container?.current.clientHeight, behavior: "smooth"})
                 }, 0) 
             } else {
-                console.log(res);
                 alert('Somethink went wrong. Please try again')
             }
         }
