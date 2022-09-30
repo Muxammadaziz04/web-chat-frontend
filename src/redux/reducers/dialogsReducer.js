@@ -18,7 +18,7 @@ const changeStatus = (state, payload) => {
 }
 
 const orderDialogs = (state, payload) => {
-    const dialog = state.dialogs.find(dialog => dialog.dialog_id === payload.data.dialog_id)
+    const dialog = state.dialogs?.find(dialog => dialog.dialog_id === payload.data.dialog_id) || null
 
     if (dialog) {
         let newData = state.dialogs.map(dialog => {
@@ -38,9 +38,9 @@ const orderDialogs = (state, payload) => {
         });
         return { dialogs: newData, loading: state.loading }
     } else {
-        const newData = [{dialog_id: payload.dialog_id, companion: [payload.user]  || payload.companion, last_message: [payload.data]}, ...state.dialogs]
-        if(payload.data?.message_from && user_id !== payload.data?.message_from) newData[0].notificate = newData[0].notificate + 1 || 1
-        return {dialogs: newData, loading: state.loading}
+        const newData = [{ dialog_id: payload.dialog_id, companion: [payload.user] || payload.companion, last_message: [payload.data] }, ...state.dialogs]
+        if (payload.data?.message_from && user_id !== payload.data?.message_from) newData[0].notificate = newData[0].notificate + 1 || 1
+        return { dialogs: newData, loading: state.loading }
     }
 }
 

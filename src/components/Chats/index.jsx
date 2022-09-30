@@ -18,6 +18,7 @@ const Chats = () => {
 
     const func = useCallback(data => {
         setTimeout(() => {
+            console.log(data);
             dispatch(newMessage(data))
         }, 0)
     }, [dispatch])
@@ -26,7 +27,7 @@ const Chats = () => {
         socket.on('NEW_MESSAGE', func)
         return () => socket.off('NEW_MESSAGE', func)
     }, [func])
-    
+
     return (
         <aside className={style.chats}>
             <Header />
@@ -36,8 +37,8 @@ const Chats = () => {
                 <ul className={style.chats__list}>
                     {
                         loading ? <Loader /> :
-                            dialogs && dialogs.length ?
-                                dialogs.map(user => <Item chat={user} key={user.dialog_id} />)
+                            dialogs && dialogs.length 
+                                ? dialogs.map(user => <Item chat={user} key={user.dialog_id} />)
                                 : <DeafultChatsComponent />
                     }
                 </ul>

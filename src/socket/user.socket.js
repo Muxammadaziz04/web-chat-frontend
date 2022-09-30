@@ -15,7 +15,7 @@ export const userConnect = async (socket, dispatch) => {
     let res = await fetch(`${host}/dialogs`, { headers: { token } })
     res = await res.json()
     if (res.status === 200) {
-        dispatch(setDialogs({ dialogs: res.data.dialogs, loading: false }))
+        dispatch(setDialogs({ dialogs: res.data.dialogs || [], loading: false }))
         userJoin(socket, res.data.dialogs)
     }
 }
