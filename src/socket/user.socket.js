@@ -2,12 +2,16 @@ import { host } from "../constants"
 
 import { changeStatus, setDialogs } from "../redux/actions/dialogsAction"
 
-const userJoin = (socket, dialogs) => {
-    socket.emit('USER_JOIN', {
-        user_id: JSON.parse(localStorage.getItem('user_id')),
-        id: socket.id,
-        companions: dialogs?.map(dialog => dialog.companion[0]?.user_id)
-    })
+export const userJoin = async socket => {
+    const token = JSON.parse(localStorage.getItem('token'))
+    let res = await fetch(`${host}/dialogs`, { headers: { token } })
+    res = await res.json()
+    if(res.status === 200) {
+        socket.emit('USER_JOIN', {
+            user_id: JSON.parse(localStorage.getItem('user_id')),
+            companions: res.data.dialogs?.map(dialog => dialog.companion[0]?.user_id)
+        })
+    }
 }
 
 export const userConnect = async (socket, dispatch) => {
@@ -17,7 +21,7 @@ export const userConnect = async (socket, dispatch) => {
     res = await res.json()
     if (res.status === 200) {
         dispatch(setDialogs({ dialogs: res.data.dialogs || [], loading: false }))
-        userJoin(socket, res.data.dialogs)
+        userJoin(socket)
     }
 }
 

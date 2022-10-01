@@ -9,6 +9,7 @@ import dropIcon from '../../../Assets/3dot.svg'
 import style from './Header.module.scss'
 import AddChat from '../AddChat';
 import Popup from '../Popup';
+import { socket } from '../../../socket';
 
 const ChatsHeader = () => {
     const navigate = useNavigate()
@@ -22,6 +23,7 @@ const ChatsHeader = () => {
         localStorage.removeItem("token")
         localStorage.removeItem('user_id')
         dispatch({type: "SET_USER", payload: {}})
+        socket.disconnect(true)
         navigate('/login')
     }
 
