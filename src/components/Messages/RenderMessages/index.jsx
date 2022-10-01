@@ -1,12 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import getTimes from '../../../Utils';
 import DateItem from '../Date';
 import Item from '../Item';
 import NewMessage from '../NewMessage';
-import { user_id } from '../../../constants';
 
 const RenderMessages = ({ messages }) => {
+    const { user_id } = useSelector(state => state.userReducer)
     const firstNewMessageId = messages?.find(msg => !msg.viewed && msg.message_from !== user_id)?.message_id || null
     let { fullDate: currentFullDate } = getTimes(new Date())
     

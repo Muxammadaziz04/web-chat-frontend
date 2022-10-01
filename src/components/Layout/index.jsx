@@ -1,17 +1,22 @@
 import { useCallback, useLayoutEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, Navigate, useParams } from "react-router-dom";
 
-import { host, token } from "../../constants";
+import { host } from "../../constants";
+import { socket } from "../../socket";
 import Chats from "../Chats";
+import { userConnect } from "../../socket/user.socket";
 
 import style from './Layout.module.scss'
 
 const Layout = () => {
     const dispatch = useDispatch()
     const { companion_id } = useParams()
+    const localToken = JSON.parse(localStorage.getItem('token'))
+    const { token } = useSelector(state => state.userReducer)
 
     const getUserInfo = useCallback(async () => {
+        userConnect(socket, dispatch)
         let res = await fetch(`${host}/userinfo`, { headers: { token } })
         res = await res.json()
         if (res.status === 200) {
@@ -20,13 +25,13 @@ const Layout = () => {
         } else {
             alert(res.error || res.message)
         }
-    }, [dispatch])
+    }, [dispatch, token])
 
     useLayoutEffect(() => {
         getUserInfo()
     }, [getUserInfo])
 
-    if (!token) return <Navigate to='/login' />
+    if (!localToken) return <Navigate to='/login' />
 
     return (
         <main className={style.main}>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { host, token, user_id } from '../../../constants'
+import { host } from '../../../constants'
 import { newMessage } from '../../../redux/actions/dialogsAction';
 
 import style from './AddChat.module.scss'
@@ -12,6 +12,7 @@ const AddChat = ({ isOpen, setIsOpen }) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { register, formState: { errors, isValid }, handleSubmit, reset } = useForm({ mode: "onChange", })
+    const { token, user_id } = useSelector(state => state.userReducer)
 
     const addDialog = async (data) => {
         try {

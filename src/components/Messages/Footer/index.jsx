@@ -1,10 +1,10 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import smileIcon from '../../../Assets/smile.svg'
 import sendIcon from '../../../Assets/send.svg'
-import { host, token } from '../../../constants';
+import { host } from '../../../constants';
 import { socket } from '../../../socket';
 import { newMessage } from '../../../redux/actions/dialogsAction'
 import Emoji from '../../Emoji';
@@ -17,6 +17,7 @@ const Footer = ({ setMessages, container }) => {
     const { companion_id } = useParams()
     const [message, setMessage] = useState('')
     const [visible, setVisible] = useState(false)
+    const { token } = useSelector(state => state.userReducer)
 
     const pickEmoji = useCallback((emoji) => {
         inputRef.current.focus()

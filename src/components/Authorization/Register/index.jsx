@@ -8,9 +8,11 @@ import { host } from '../../../constants'
 
 import style from '../Authorization.module.scss'
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 const Register = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { register, formState: { errors, isValid }, handleSubmit, reset } = useForm({ mode: "onChange", })
 
     const sendForm = async (data) => {
@@ -21,6 +23,7 @@ const Register = () => {
         if (res.status === 201) {
             localStorage.setItem('token', JSON.stringify(res.token))
             localStorage.setItem('user_id', JSON.stringify(res.user.user_id))
+            dispatch({type: "SET_USER", payload: {token: res.token, user_id: res.user.user_id}})
             navigate(`/`)
             reset()
         } else {

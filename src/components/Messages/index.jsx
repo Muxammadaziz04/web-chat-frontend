@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useLayoutEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import Header from "./Header";
 import Footer from "./Footer";
@@ -8,7 +9,7 @@ import Profile from "../Profile";
 import ScrollButton from './ScrollButton'
 import RenderMessages from "./RenderMessages";
 import { socket } from "../../socket";
-import { host, token, user_id } from '../../constants'
+import { host } from '../../constants'
 
 import styles from './Messages.module.scss';
 
@@ -22,11 +23,12 @@ const Messages = () => {
     const [visible, setVisible] = useState(false)
     const [loading, setLoading] = useState(false)
     const [companion, setCompanion] = useState({})
+    const { token, user_id } = useSelector(state => state.userReducer)
 
     const newMessage = useCallback(data => {
         user_id === data.companion_id && setMessages(state => [...state, data.data])
         setVisible(true)
-    }, [])
+    }, [user_id])
 
     const handleScroll = () => {
         const currentScrollPos = containerRef.current.scrollTop
@@ -61,7 +63,7 @@ const Messages = () => {
         } else {    
             return null
         }
-    }, [messages, companion_id, loading])
+    }, [messages, companion_id, loading, user_id])
 
     useEffect(() => {
         if (messages.length && prevCompanionId.current !== companion_id && companion_id) {
@@ -98,7 +100,7 @@ const Messages = () => {
                 setLoading(false)
             })
             .catch(() => alert('Somethink went wrong. Please try again'))
-    }, [companion_id])
+    }, [companion_id, token])
 
     return (
         <>

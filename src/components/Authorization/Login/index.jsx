@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import Form from '../Form';
 import Input from '../Input';
@@ -11,6 +12,7 @@ import style from '../Authorization.module.scss'
 
 const Login = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { register, formState: { errors, isValid }, handleSubmit, reset } = useForm({ mode: "onChange", })
 
     const sendForm = async (data) => {
@@ -18,10 +20,10 @@ const Login = () => {
 
         let res = await fetch(`${host}/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body})
         res = await res.json()
-        
         if (res.status === 201) {
             localStorage.setItem('token', JSON.stringify(res.token))
             localStorage.setItem('user_id', JSON.stringify(res.user.user_id))
+            dispatch({type: "SET_USER", payload: {token: res.token, user_id: res.user.user_id}})
             navigate(`/`)
             reset()
         } else {

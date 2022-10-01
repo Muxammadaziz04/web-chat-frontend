@@ -1,11 +1,11 @@
 import { useRef, useEffect, useCallback, useState } from 'react';
 import { InView } from 'react-intersection-observer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import getTimes from '../../../Utils';
 import MessagesStatus from '../Status';
-import { host, user_id, token } from '../../../constants'
+import { host } from '../../../constants'
 import { socket } from '../../../socket'
 import { msgViewed } from '../../../redux/actions/dialogsAction';
 
@@ -16,6 +16,7 @@ const Item = ({ message }) => {
     const dispatch = useDispatch()
     const { companion_id } = useParams()
     const [viewed, setViewed] = useState(message?.viewed)
+    const { token, user_id } = useSelector(state => state.userReducer)
 
     const { time } = getTimes(message.created_at)
     const msg = message.message_body

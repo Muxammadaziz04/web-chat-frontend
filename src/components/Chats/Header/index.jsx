@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LetteredAvatar from 'react-lettered-avatar';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,8 +11,9 @@ import AddChat from '../AddChat';
 import Popup from '../Popup';
 
 const ChatsHeader = () => {
-    const [isOpen, setIsOpen] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const [isOpen, setIsOpen] = useState(false)
     const user = useSelector(state => state.userReducer)
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isOpenPopup, setIsOpenPopup] = useState(false)
@@ -20,6 +21,7 @@ const ChatsHeader = () => {
     const logOut = () => {
         localStorage.removeItem("token")
         localStorage.removeItem('user_id')
+        dispatch({type: "SET_USER", payload: {}})
         navigate('/login')
     }
 
@@ -44,7 +46,7 @@ const ChatsHeader = () => {
                 </button>
                 <div className={style.header__dropdown + `${isOpen ? '' : ' close'}`}>
                     <button onClick={() => {setIsOpenPopup(state => !state); setIsOpen(false)}}>Settings</button>
-                    <button onClick={logOut}>Log uot</button>
+                    <button onClick={logOut}>Log out</button>
                 </div>
             </span>
         </div>

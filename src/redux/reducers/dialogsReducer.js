@@ -1,5 +1,3 @@
-import { user_id } from "../../constants"
-
 const initialState = {
     dialogs: [],
     loading: true
@@ -18,6 +16,7 @@ const changeStatus = (state, payload) => {
 }
 
 const orderDialogs = (state, payload) => {
+    const user_id = JSON.parse(localStorage.getItem('user_id'))
     const dialog = state.dialogs?.find(dialog => dialog.dialog_id === payload.data.dialog_id) || null
 
     if (dialog) {

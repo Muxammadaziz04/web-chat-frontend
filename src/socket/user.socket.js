@@ -1,16 +1,17 @@
-import { host, token } from "../constants"
+import { host } from "../constants"
 
 import { changeStatus, setDialogs } from "../redux/actions/dialogsAction"
 
 const userJoin = (socket, dialogs) => {
     socket.emit('USER_JOIN', {
-        user_id: JSON.parse(localStorage.getItem('user_id')) || '0912eee5-1b21-4b4e-82c4-af4439be2d03',
+        user_id: JSON.parse(localStorage.getItem('user_id')),
         id: socket.id,
         companions: dialogs?.map(dialog => dialog.companion[0]?.user_id)
     })
 }
 
 export const userConnect = async (socket, dispatch) => {
+    const token = JSON.parse(localStorage.getItem('token'))
     dispatch(setDialogs({ dialogs: [], loading: true }))
     let res = await fetch(`${host}/dialogs`, { headers: { token } })
     res = await res.json()

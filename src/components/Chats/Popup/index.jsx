@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LetteredAvatar from 'react-lettered-avatar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { host, token } from '../../../constants';
+import { host } from '../../../constants';
 import camera from '../../../Assets/camera.svg'
 
 import style from './Popup.module.scss'
@@ -14,6 +14,7 @@ const Popup = ({ setVisible }) => {
     const [loading, setLoading] = useState(false)
     const [user, setUser] = useState()
     const [ava, setAva] = useState(null)
+    const { token } = useSelector(state => state.userReducer)
 
     const sendForm = async (e) => {
         e.preventDefault()
@@ -49,7 +50,7 @@ const Popup = ({ setVisible }) => {
                     alert(res.error || res.message)
                 }
             })
-    }, [dispatch])
+    }, [dispatch, token])
 
     return (
         <div className={style.popup} data-item="wrapper" onClick={(e) => e.target.dataset.item === 'wrapper' && setVisible(false)}>
