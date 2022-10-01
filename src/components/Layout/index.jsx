@@ -16,6 +16,7 @@ const Layout = () => {
     const { token } = useSelector(state => state.userReducer)
 
     const getUserInfo = useCallback(async () => {
+        if(!localToken) return
         userConnect(socket, dispatch)
         let res = await fetch(`${host}/userinfo`, { headers: { token } })
         res = await res.json()
@@ -25,7 +26,7 @@ const Layout = () => {
         } else {
             alert(res.error || res.message)
         }
-    }, [dispatch, token])
+    }, [dispatch, token, localToken])
 
     useLayoutEffect(() => {
         getUserInfo()
