@@ -32,7 +32,7 @@ const Layout = () => {
         getUserInfo()
     }, [getUserInfo])
 
-    if (!localToken) return <Navigate to='/login' />
+    if (!localToken) return <Navigate to='/register' />
 
     return (
         <main className={style.main}>

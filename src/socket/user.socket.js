@@ -9,7 +9,8 @@ export const userJoin = async socket => {
     if(res.status === 200) {
         socket.emit('USER_JOIN', {
             user_id: JSON.parse(localStorage.getItem('user_id')),
-            companions: res.data.dialogs?.map(dialog => dialog.companion[0]?.user_id)
+            companions: res.data.dialogs?.map(dialog => dialog.companion[0]?.user_id),
+            token
         })
     }
 }

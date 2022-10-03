@@ -20,16 +20,16 @@ function App() {
   socket.on('NEW_USER_ONLINE', data => newUser(data, dispatch))
   socket.on('USER_EXIT', data => leaveUser(data, dispatch))
 
-  const handleVisibilityChange = useCallback(() => {
+  const handleVisibilityChange = useCallback(async() => {
     const options = { method: 'PUT', headers: { token } }
     if(prevState.current !== document.visibilityState && document.visibilityState === 'hidden') {
-      socket.disconnect(true)
-      fetch(`${host}/leave`, options)
+      await socket.disconnect(true);
+      await fetch(`${host}/leave`, options)
       prevState.current = document.visibilityState
     } else if (prevState.current !== document.visibilityState && document.visibilityState === 'visible') {
-      socket.connect(true)
-      userJoin(socket)
-      fetch(`${host}/online`, options)
+      await socket.connect(true)
+      await userJoin(socket);
+      await fetch(`${host}/online`, options)
       prevState.current = document.visibilityState
     }
   }, [token])
