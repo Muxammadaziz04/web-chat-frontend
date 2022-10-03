@@ -8,7 +8,7 @@ import Messages from './components/Messages'
 import Register from "./components/Authorization/Register";
 import Login from "./components/Authorization/Login";
 import Verification from "./components/Authorization/Verification";
-import { host } from './constants'
+// import { host } from './constants'
 import { socket } from "./socket";
 import { leaveUser, newUser, userJoin } from "./socket/user.socket";
 
@@ -21,18 +21,15 @@ function App() {
   socket.on('USER_EXIT', data => leaveUser(data, dispatch))
 
   const handleVisibilityChange = useCallback(async() => {
-    const options = { method: 'PUT', headers: { token } }
     if(prevState.current !== document.visibilityState && document.visibilityState === 'hidden') {
       await socket.disconnect(true);
-      await fetch(`${host}/leave`, options)
       prevState.current = document.visibilityState
     } else if (prevState.current !== document.visibilityState && document.visibilityState === 'visible') {
-      await socket.connect(true)
+      await socket.connect(true);
       await userJoin(socket);
-      await fetch(`${host}/online`, options)
       prevState.current = document.visibilityState
     }
-  }, [token])
+  }, [])
 
 
 
